@@ -2,16 +2,31 @@
 # Add the `@index` or `@index(unique: true)` annotation after any non-key field
 # https://academy.subquery.network/build/graphql.html#indexing-by-non-primary-key-field
 
-type Claim @entity {
+type Swap @entity {
   id: ID! # Index
   transactionHash: String!
   blockHeight: BigInt!
-  date: Date!
-  receiver: String!
-  amount: BigInt!
+  date: Date! @index
+  sender: String! @index
+  offerAsset: String!
+  askAsset: String!
+  offerAmount: BigInt!
+  returnAmount: BigInt!
+  recipient: String!
 }
 
-type DailyClaimSummary @entity {
-  id: ID! # this is the ISO string of the day e.g. '2023-03-26'
-  total_claimed: BigInt!
+type CoinPrice @entity {
+  id: ID! # Index
+  coingeckoId: String! @index
+  date: Date! @index
+  price: Float!
+}
+
+type UserSummary @entity {
+  id: ID! # Index
+  address: String! @index
+  totalSold: BigInt! # Amount of APOLLO sold
+  totalBought: BigInt! # Amount of APOLLO bought
+  totalUSDSpent: BigInt! # Amount of USD spent buying APOLLO
+  totalUSDReceived: BigInt! # Amount of USD received selling APOLLO
 }

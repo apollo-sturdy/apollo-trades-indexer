@@ -25,11 +25,13 @@
     "@subql/cli": "latest",
     "@subql/node-cosmos": "latest",
     "@subql/testing": "latest",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "@types/node-fetch": "2.6.7"
   },
   "dependencies": {
     "@subql/types-cosmos": "latest",
     "@types/node": "^17.0.21",
+    "node-fetch": "2.6.7",
     "pino": "^7.8.0",
     "ts-proto": "^1.112.1",
     "tslib": "^2.3.1"

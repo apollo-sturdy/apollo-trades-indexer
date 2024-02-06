@@ -36,28 +36,80 @@ const project: CosmosProject = {
      * These settings can be found in your docker-compose.yaml, they will slow indexing but prevent your project being rate limited
      */
     endpoint: [
-      "https://rpc-kralum.neutron-1.neutron.org",
-      "https://neutron-rpc.lavenderfive.com",
-      "https://rpc-neutron.whispernode.com",
+      "https://rpc-kralum.neutron-1.neutron.org", // Lowest height: 5323785
+      "https://rpc-neutron.whispernode.com", // Lowest height: 6302347
+      // "https://neutron-rpc.polkachu.com" // Lowest height: 5323785
     ],
   },
   dataSources: [
     {
       kind: CosmosDatasourceKind.Runtime,
-      startBlock: 1,
+      startBlock: 6382048,
+      // assets: new Map([["astroportPair", { file: "./schemas/astroport-pair-xyk-sale-tax.json" }]]),
+      // options: {
+      //   abi: "astroportPair",
+      // },
       mapping: {
         file: "./dist/index.js",
         handlers: [
           {
-            handler: "handleAirdropClaim",
-            kind: CosmosHandlerKind.Message,
+            handler: "handleSwap",
+            kind: CosmosHandlerKind.Event,
             filter: {
-              type: "/cosmwasm.wasm.v1.MsgExecuteContract",
-              contractCall: "claim",
-              values: {
-                contract:
-                  "neutron198sxsrjvt2v2lln2ajn82ks76k97mj72mtgl7309jehd0vy8rezs7e6c56",
-              },
+              type: "wasm",
+              attributes: {
+                "action": "swap",
+                "_contract_address": "neutron169vshmj6x7dlugd32zvwpv6ujwgz80d0l6xt8f5eufkn2dtvhk6s3ulgqv",
+              }
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: CosmosDatasourceKind.Runtime,
+      startBlock: 6382781,
+      mapping: {
+        file: "./dist/index.js",
+        handlers: [
+          {
+            handler: "handleSwap",
+            kind: CosmosHandlerKind.Event,
+            filter: {
+              type: "wasm",
+              attributes: {
+                "action": "swap",
+                "_contract_address": "neutron1zhjrgpvu2th5t8w5ndfw9lwsqp95sgr46kf4j3jrcfe2lep0hlnqfczpjm",
+              }
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: CosmosDatasourceKind.Runtime,
+      startBlock: 6390635,
+      mapping: {
+        file: "./dist/index.js",
+        handlers: [
+          {
+            handler: "handleSwap",
+            kind: CosmosHandlerKind.Event,
+            filter: {
+              type: "wasm",
+              // If we enable this then swaps through the router will not be indexed.
+              // Not sure how else to filter only "real swaps" and not any event that
+              // fakes these attributes? Perhaps just in the handler?
+              // messageFilter: {
+              //   type: "/cosmwasm.wasm.v1.MsgExecuteContract",
+              //   values: {
+              //     contract: "neutron15wal8wsy7mq37hagmrzchwmugpjzwlzrlw7pylkhlfuwukmc2kps722ems",
+              //   }
+              // },
+              attributes: {
+                "action": "swap",
+                "_contract_address": "neutron15wal8wsy7mq37hagmrzchwmugpjzwlzrlw7pylkhlfuwukmc2kps722ems",
+              }
             },
           },
         ],
